@@ -1,0 +1,71 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+        ports:
+          - 3307:3306
+
+    env:
+      DB_HOST: 127.0.0.1
+      DB_PORT: 3307
+      DB_USER: root
+      DB_PASSWORD: root
+      API_BASE_URL: http://127.0.0.1:8000
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run:
+          python -m pip install --upgrade pip &&
+          pip install -r requirements.txt &&
+          playwright install --with-deps
+
+      - name: Wait for MySQL
+        run: |
+          for i in {1..30}; do
+            if mysql -h 127.0.0.1 -P 3307 -uroot -proot -e "SELECT 1;" >/dev/null 2>&1; then
+              echo "MySQL is up"
+              break
+            fi
+            echo "Waiting for MySQL..."
+            sleep 2
+          done
+
+      - name: Init DB schema
+        run: |
+          mysql -h 127.0.0.1 -P 3307 -uroot -proot < db/init_mysql.sql
+
+      - name: Run unit/BDD tests (no UI)
+        run: |
+          pytest tests/etl -m "not ui"
+          pytest tests/api -m "not ui"
+
+      - name: Run UI + E2E tests (headless)
+        run: |
+          pytest tests/ui
+          pytest tests/e2e
