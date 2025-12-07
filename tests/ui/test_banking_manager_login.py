@@ -12,6 +12,7 @@ def login_as_manager(page):
 
 
 @pytest.mark.ui
+@pytest.mark.ui_smoke
 def test_bank_manager_login():
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)

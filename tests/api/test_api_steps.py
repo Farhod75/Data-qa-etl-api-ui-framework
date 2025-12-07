@@ -1,8 +1,10 @@
-import pytest
 import requests
 from pytest_bdd import scenarios, given, when, then, parsers
 from utils.config import BASE_URL
 from utils import db_client
+import pytest
+
+pytestmark = pytest.mark.api_smoke
 
 
 # Link to the feature file (pytest.ini has bdd_features_base_dir = features)

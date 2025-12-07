@@ -2,6 +2,8 @@ from pytest_bdd import scenarios, given, when, then, parsers
 from utils.config import BASE_URL
 from utils import db_client
 from pytest_bdd import parsers  # if not already imported at top
+import pytest
+pytestmark = pytest.mark.etl_smoke
 
 # Link this file to the feature
 scenarios("etl_validation.feature")
