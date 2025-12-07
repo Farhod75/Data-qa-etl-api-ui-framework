@@ -23,7 +23,13 @@ This project demonstrates an enterprise-grade End-to-End (E2E) Quality Assurance
 -   **CI/CD Integration (GitHub Actions):**
     -   Automated workflow (`.github/workflows/ci.yml`) to run all tests on `push` and `pull_request`.
     -   Sets up a MySQL service, Python environment, installs dependencies (including Playwright browsers), and executes ETL, API, and UI tests.
+## Key Selling Points
 
+-   **Full-Stack E2E Validation:** Demonstrates robust testing across Database (ETL), API (FastAPI), and UI (Playwright) layers, ensuring comprehensive system quality.
+-   **BDD-Driven Development:** Utilizes `pytest-bdd` for clear, business-readable test scenarios, enhancing collaboration and test maintainability.
+-   **Production-Ready CI/CD:** Implements GitHub Actions for automated, containerized testing, including MySQL and FastAPI services, ensuring rapid feedback and deployment confidence.
+-   **Data-Driven & Scalable:** Designed with data-driven principles and modular architecture, allowing for easy expansion and adaptation to complex test data requirements.
+-   **Problem-Solving & Debugging:** Showcases practical problem-solving skills through real-world challenges encountered and resolved during framework development (e.g., CI environment setup, Playwright locator strategies, API service orchestration).
 ## Project Structure
 .
 ├── .github/
